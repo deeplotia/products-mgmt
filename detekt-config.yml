@@ -1,0 +1,31 @@
+build:
+  maxIssues: 0
+  excludeCorrectable: false
+  weights:
+    # complexity: 2
+    # LongParameterList: 1
+    # style: 1
+    # comments: 1
+
+config:
+  validation: true
+  warningsAsErrors: false
+  checkExhaustiveness: false
+  # when writing own rules with new properties, exclude the property path e.g.: 'my_rule_set,.*>.*>[my_property]'
+  excludes: ''
+
+complexity:
+  active: true
+  LargeClass:
+    active: true
+    threshold: 600
+  LongMethod:
+    active: true
+    threshold: 60
+  LongParameterList:
+    active: true
+    functionThreshold: 6
+    constructorThreshold: 10
+  MethodOverloading:
+    active: false
+    threshold: 6

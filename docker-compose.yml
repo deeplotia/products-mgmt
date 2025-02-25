@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: covestrodb
+      POSTGRES_USER: deeplotia
+      POSTGRES_PASSWORD: Hello!World # todo: remove username and password at both places
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # todo: info: what does volume do
+
+volumes:
+  postgres_data:

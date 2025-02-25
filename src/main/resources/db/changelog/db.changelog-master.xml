@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+   <include file="db/changelog/changeset/create-products-table-250220252113.sql"/>
+
+   <changeSet id="initial-upload-in-product-table" author="liquibase" runAlways="false" runOnChange="false">
+       <loadData
+           file="classpath:static/products.csv"
+           separator=","
+           tableName="products">
+           <column name="material_id" type="STRING"/>
+           <column name="name" type="STRING"/>
+           <column name="price" type="NUMERIC"/>
+           <column name="currency" type="STRING"/>
+           <column name="category" type="STRING"/>
+       </loadData>
+   </changeSet>
+
+</databaseChangeLog>
