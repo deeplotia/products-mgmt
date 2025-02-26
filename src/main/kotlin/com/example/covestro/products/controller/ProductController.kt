@@ -51,18 +51,18 @@ class ProductController(private val productService: ProductService) {
     }
 }
 
-//@ControllerAdvice
-//class GlobalExceptionHandler {
-//
-//    @ExceptionHandler(ProductException::class)
-//    @ResponseBody
-//    fun handleProductException(ex: ProductException): ResponseEntity<String> {
-//        return ResponseEntity(ex.message ?: "Invalid product", HttpStatus.BAD_REQUEST)
-//    }
-//
-//    @ExceptionHandler(Exception::class)
-//    @ResponseBody
-//    fun handleGenericException(ex: Exception): ResponseEntity<String> {
-//        return ResponseEntity(ex.message ?: "An error occurred", HttpStatus.INTERNAL_SERVER_ERROR)
-//    }
-//}
+@ControllerAdvice
+class GlobalExceptionHandler {
+
+   @ExceptionHandler(ProductException::class)
+   @ResponseBody
+   fun handleProductException(ex: ProductException): ResponseEntity<String> {
+       return ResponseEntity(ex.message ?: "Invalid product", HttpStatus.BAD_REQUEST)
+   }
+
+   @ExceptionHandler(Exception::class)
+   @ResponseBody
+   fun handleGenericException(ex: Exception): ResponseEntity<String> {
+       return ResponseEntity(ex.message ?: "An error occurred", HttpStatus.INTERNAL_SERVER_ERROR)
+   }
+}
