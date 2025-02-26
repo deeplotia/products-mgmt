@@ -5,11 +5,11 @@ services:
     environment:
       POSTGRES_DB: covestrodb
       POSTGRES_USER: deeplotia
-      POSTGRES_PASSWORD: Hello!World # todo: remove username and password at both places
+      POSTGRES_PASSWORD: Hello!World
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data # todo: info: what does volume do
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   postgres_data:
