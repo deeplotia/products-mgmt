@@ -11,27 +11,15 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
-import java.util.*
+import java.util.Optional
 
 class ProductServiceTest {
     private lateinit var productService: ProductService
     private val productRepository: ProductRepository = mockk()
 
-    private lateinit var product: Product
-
     @BeforeEach
     fun setUp() {
         productService = ProductService(productRepository)
-        product = Product(
-            id = 1,
-            materialId = "M123",
-            name = "Product1",
-            price = BigDecimal("100.00"),
-            currency = "USD",
-            category = "Category1",
-            createdBy = "api-user",
-            lastUpdateBy = "api-user"
-        )
     }
 
     @Test
@@ -48,7 +36,7 @@ class ProductServiceTest {
 
     @Test
     fun `updateById should throw InvalidProductException when id does not match`() {
-        val invalidProduct = product.copy(id = 2)
+        val invalidProduct = PRODUCT.copy(id = 2)
 
         val exception = assertThrows<ProductException.InvalidProductException> {
             productService.updateById(1, invalidProduct)
@@ -62,7 +50,7 @@ class ProductServiceTest {
         every { productRepository.existsById(1) } returns false
 
         val exception = assertThrows<ProductException.ProductNotFoundException> {
-            productService.updateById(1, product)
+            productService.updateById(1, PRODUCT)
         }
 
         assertEquals("Product with id 1 not found", exception.message)
@@ -72,9 +60,22 @@ class ProductServiceTest {
     @Test
     fun `create should throw InvalidProductException when id is not zero`() {
         val exception = assertThrows<ProductException.InvalidProductException> {
-            productService.create(product)
+            productService.create(PRODUCT)
         }
 
         assertEquals("Product ID must be zero for creation", exception.message)
+    }
+
+    companion object {
+        val PRODUCT = Product(
+            id = 1,
+            materialId = "702707UX",
+            name = "WH1000",
+            price = BigDecimal("3.44"),
+            currency = "USD",
+            category = "Plastics",
+            createdBy = "api-user",
+            lastUpdateBy = "api-user"
+        )
     }
 }
