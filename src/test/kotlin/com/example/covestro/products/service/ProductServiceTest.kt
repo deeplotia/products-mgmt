@@ -31,7 +31,7 @@ class ProductServiceTest {
         }
 
         assertEquals("Product with id 1 not found", exception.message)
-        verify { productRepository.findById(1) }
+        verify(exactly = 1) { productRepository.findById(1) }
     }
 
     @Test
@@ -43,6 +43,9 @@ class ProductServiceTest {
         }
 
         assertEquals("Product ID in the request body does not match the ID in the path", exception.message)
+        verify(exactly = 0) { productRepository.findById(any()) }
+        verify(exactly = 0) { productRepository.save(any()) }
+        verify(exactly = 0) { productRepository.findAll() }
     }
 
     @Test
@@ -54,7 +57,9 @@ class ProductServiceTest {
         }
 
         assertEquals("Product with id 1 not found", exception.message)
-        verify { productRepository.existsById(1) }
+        verify(exactly = 1) { productRepository.existsById(1) }
+        verify(exactly = 0) { productRepository.save(any()) }
+        verify(exactly = 0) { productRepository.findAll() }
     }
 
     @Test
@@ -64,6 +69,19 @@ class ProductServiceTest {
         }
 
         assertEquals("Product ID must be zero for creation", exception.message)
+        verify(exactly = 0) { productRepository.save(any()) }
+        verify(exactly = 0) { productRepository.findAll() }
+    }
+
+    @Test
+    fun `create should save the product when provided with valid input`() {
+        every { productRepository.save(any()) } returns PRODUCT
+        every { productRepository.findAll() } returns emptyList()
+
+        productService.create(PRODUCT.copy(0L))
+
+        verify(exactly = 1) { productRepository.save(any()) }
+        verify(exactly = 1) { productRepository.findAll() }
     }
 
     companion object {

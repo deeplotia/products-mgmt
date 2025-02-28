@@ -53,7 +53,8 @@ class ProductService(
      * @param product the product data to update.
      * @return the updated product.
      * 
-     * @throws ProductException.InvalidProductException if the product ID in the request body does not match the ID in the path.
+     * @throws ProductException.InvalidProductException if the product ID in the request body does not match the ID in
+     * the path.
      * @throws ProductException.ProductNotFoundException if the product with the specified ID is not found.
      * @throws ProductException.DuplicateMaterialIdException if the material ID already exists.
      */
@@ -70,7 +71,9 @@ class ProductService(
             throw ProductException.ProductNotFoundException("Product with id $id not found")
         }
         return try {
-            productRepository.save(product)
+            val createdProduct = productRepository.save(product)
+            logMaterialsInEachCategory()
+            createdProduct
         } catch (ex: DataIntegrityViolationException) {
             handleException(ex, product)
         }
@@ -92,9 +95,18 @@ class ProductService(
             throw ProductException.InvalidProductException("Product ID must be zero for creation")
         }
         return try {
-            productRepository.save(product)
+            val createdProduct = productRepository.save(product)
+            logMaterialsInEachCategory()
+            createdProduct
         } catch (ex: DataIntegrityViolationException) {
             handleException(ex, product)
+        }
+    }
+
+    private fun logMaterialsInEachCategory() {
+        val categoryCounts = productRepository.findAll().groupingBy { it.category }.eachCount()
+        categoryCounts.forEach { (category, count) ->
+            log.info("Category: $category, Count: $count")
         }
     }
 
